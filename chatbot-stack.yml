@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create AWS Chatbot and IAM Role
+
+Parameters:
+  SlackChannelId:
+    Type: String
+    Description: The Slack Channel ID
+  SlackWorkspaceId:
+    Type: String
+    Description: The Slack Workspace ID
+
+Resources:
+  ChatbotRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              Service: "chatbot.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies: 
+        - PolicyName: "ChatbotSNSPolicy"
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action: 
+                  - "sns:Subscribe"
+                  - "sns:ListSubscriptionsByTopic"
+                  - "sns:Receive"
+                Resource: "*"
+
+  ChatbotSlackChannel:
+    Type: AWS::Chatbot::SlackChannelConfiguration
+    Properties:
+      ConfigurationName: "MySlackChannel"
+      IamRoleArn: !GetAtt ChatbotRole.Arn
+      SlackChannelId: !Ref SlackChannelId
+      SlackWorkspaceId: !Ref SlackWorkspaceId
+      SnsTopicArns:
+        - !ImportValue SimpleServiceAAlarmArn
+        - !ImportValue SimpleServiceBAlarmArn
+      LoggingLevel: "ERROR"

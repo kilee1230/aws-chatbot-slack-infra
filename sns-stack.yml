@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create an SNS Topic
+
+Resources:
+  SimpleServiceAAlarm:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: simple-service-a-dev
+      Tags:
+        - Key: Name
+          Value: simple-service-a-dev
+        - Key: Environment
+          Value: dev
+        - Key: Application
+          Value: simple-service-a
+
+  SimpleServiceBAlarm:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: simple-service-b-dev
+      Tags:
+        - Key: Name
+          Value: simple-service-b-dev
+        - Key: Environment
+          Value: dev
+        - Key: Application
+          Value: simple-service-b
+
+Outputs:
+  SimpleServiceAAlarmArn:
+    Description: The ARN of the SimpleServiceAAlarm SNS Topic
+    Value: !Ref SimpleServiceAAlarm
+    Export:
+      Name: SimpleServiceAAlarmArn
+
+  SimpleServiceBAlarmArn:
+    Description: The ARN of the SimpleServiceBAlarm SNS Topic
+    Value: !Ref SimpleServiceBAlarm
+    Export:
+      Name: SimpleServiceBAlarmArn
