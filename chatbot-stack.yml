@@ -20,6 +20,8 @@ Resources:
             Principal: 
               Service: "chatbot.amazonaws.com"
             Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess
       Policies: 
         - PolicyName: "ChatbotSNSPolicy"
           PolicyDocument: 
@@ -43,3 +45,7 @@ Resources:
         - !ImportValue SimpleServiceAAlarmArn
         - !ImportValue SimpleServiceBAlarmArn
       LoggingLevel: "ERROR"
+      GuardrailPolicies:
+        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonSNSReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSResourceExplorerReadOnlyAccess
